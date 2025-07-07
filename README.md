@@ -19,7 +19,8 @@
 
 Install, update, uninstall and view information about debian packages.
 
-Eddy can also support other packaging formats such as .rpm thanks to it's PackageKit backend, although it's primary focus is managing debian packages and being designed for elementary OS.
+Eddy can also support other packaging formats such as .rpm thanks to its PackageKit backend, although its primary focus 
+is managing debian packages and being designed for elementary OS.
 
 ## Installation
 
@@ -31,9 +32,12 @@ These dependencies must be present before building
  - `packagekit-glib2`
  - `unity`
 
- You can install these on a Ubuntu-based system by executing this command:
+ You can install these on an Ubuntu-based system by executing this command:
 
- `sudo apt install valac libgranite-dev libpackagekit-glib2-dev libunity-dev meson ninja-build libzeitgeist-2.0-dev gettext`
+```
+sudo apt install valac libgranite-dev libpackagekit-glib2-dev libunity-dev meson ninja-build \
+libzeitgeist-2.0-dev gettext
+```
 
 ### Building
 ```
@@ -48,9 +52,21 @@ sudo ninja install
 com.github.donadigo.eddy
 ```
 
-### Reporting bugs & debugging
-When reporting a bug you should include as much information as possible, that is the system that you're running, what you did in order to have the bug appear and probably a simple list of steps on how to reproduce the issue, however it is not required as some issues are not easily reproducible.
+## Running tests
+After `meson build` is complete, run
+```
+ninja -C build
+``` 
+once, and after that each time there's a change in a unit test, run
+```
+meson test -C build
+```
 
-Additionally you can include a debug log in the description of the issue. To get a full log of backend and application messages, you can execute Eddy in a terminal with the following command:
+It should print OK on all the tests at the end of the output.
+
+## Reporting bugs & debugging
+When reporting a bug, you should include as much information as possible, that is the system that you're running, what you did in order to have the bug appear and probably a simple list of steps on how to reproduce the issue, however, it is not required as some issues are not easily reproducible.
+
+Additionally, you can include a debug log in the description of the issue. To get a full log of backend and application messages, you can execute Eddy in a terminal with the following command:
 `G_MESSAGES_DEBUG=all com.github.donadigo.eddy --debug`, reproduce the bug in the application window and copy the terminal output to the issue's description.
 This information could really help localizing and fixing the issue.

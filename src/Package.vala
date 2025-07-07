@@ -260,47 +260,6 @@ public class Eddy.Package : Object {
         }
     }
 
-    private static int compare_versions (string a, string b) {
-        if (a == b) {
-            return 0;
-        }
-
-        string[] atok = a.split ("~");
-        string[] btok = b.split ("~");
-
-        if (atok.length < 2 && btok.length >= 2) {
-            return -1;
-        } else if (atok.length >= 2 && btok.length < 2) {
-            return 1;
-        }
-
-        string aver = atok[0];
-        string bver = btok[0];
-
-        string[] aparts = aver.split (".");
-        string[] bparts = bver.split (".");
-
-        int length = int.max (aparts.length, bparts.length);
-        for (int i = 0; i < length; i++) {
-            int a_num, b_num;
-            bool a_is_num = int.try_parse(aparts[i], out a_num);
-            bool b_is_num = int.try_parse(bparts[i], out b_num);
-
-            if (a_is_num && b_is_num) {
-                if (a_num < b_num) {
-                    return -1;
-                } else if (a_num > b_num) {
-                    return 1;
-                }
-                return 0;
-            } else {
-                return strcmp (aparts[i], bparts[i]);
-            }
-        }
-
-        return 0;
-    }
-
     public Package (string filename) {
         Object (filename: filename);
     }
@@ -426,10 +385,10 @@ public class Eddy.Package : Object {
                     found = true;
                     state_flags = StateFlags.INSTALLED;
 
-                    int rc = compare_versions (package.get_version (), version);
-                    if (rc == 1) {
+                    int rc = EddyUtils.compare_versions (version, package.get_version ());
+                    if (rc < 0) {
                         state_flags |= StateFlags.CAN_DOWNGRADE;
-                    } else if (rc == -1) {
+                    } else if (rc > 0) {
                         state_flags |= StateFlags.CAN_UPDATE;
                     }
                 }
